@@ -1,0 +1,9 @@
+node_modules/
+.expo/
+dist/
+coverage/
+.env
+*.log
+frontend/.env.local
+backend/prisma/*.db*
+

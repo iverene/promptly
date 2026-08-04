@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Folder {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  isArchived  Boolean    @default(false) @map("is_archived")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  categories  Category[]
+
+  @@index([name])
+  @@index([isArchived, updatedAt])
+  @@map("folders")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  folderId  String   @map("folder_id")
+  name      String
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  prompts   Prompt[]
+
+  @@unique([folderId, name])
+  @@index([folderId, sortOrder])
+  @@map("categories")
+}
+
+model Prompt {
+  id         String   @id @default(cuid())
+  categoryId String   @map("category_id")
+  title      String
+  content    String
+  notes      String?
+  isFavorite Boolean  @default(false) @map("is_favorite")
+  isArchived Boolean  @default(false) @map("is_archived")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId, isArchived, updatedAt])
+  @@index([isFavorite, isArchived])
+  @@index([title])
+  @@map("prompts")
+}
+

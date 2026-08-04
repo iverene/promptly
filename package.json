@@ -1,0 +1,14 @@
+{
+  "name": "promptly",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["frontend", "backend"],
+  "scripts": {
+    "dev:frontend": "npm run start --workspace frontend",
+    "dev:backend": "npm run dev --workspace backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "check": "npm run check --workspaces --if-present"
+  },
+  "engines": { "node": ">=20" }
+}
+
