@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Promptly",
+    "slug": "promptly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "promptly",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "plugins": ["expo-router"],
+    "splash": { "backgroundColor": "#F5F5F5" },
+    "ios": { "supportsTablet": true, "bundleIdentifier": "app.promptly.mobile" },
+    "android": { "package": "app.promptly.mobile", "adaptiveIcon": { "backgroundColor": "#F5F5F5" } },
+    "web": { "bundler": "metro" },
+    "experiments": { "typedRoutes": false }
+  }
+}
+
