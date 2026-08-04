@@ -6,13 +6,25 @@
     "orientation": "portrait",
     "scheme": "promptly",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "plugins": ["expo-router"],
-    "splash": { "backgroundColor": "#F5F5F5" },
-    "ios": { "supportsTablet": true, "bundleIdentifier": "app.promptly.mobile" },
-    "android": { "package": "app.promptly.mobile", "adaptiveIcon": { "backgroundColor": "#F5F5F5" } },
-    "web": { "bundler": "metro" },
-    "experiments": { "typedRoutes": false }
+    "plugins": [
+      "expo-router",
+      "expo-splash-screen"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.promptly.mobile"
+    },
+    "android": {
+      "package": "app.promptly.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#F5F5F5"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "experiments": {
+      "typedRoutes": false
+    }
   }
 }
-
