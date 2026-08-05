@@ -81,6 +81,11 @@ Optional description.
 ## Navigation
 Fully rounded floating glass bottom navigation.
 
+## Profile
+Display the user's profile name and email in a calm monochrome account screen.
+Allow the display name to be edited and keep sign-out inside the profile rather
+than in the primary navigation.
+
 ## Motion
 Natural fades and subtle slides only (180–250ms).
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { supabase } from './supabase';
+import { getValidSession, supabase } from './supabase';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
@@ -9,14 +9,23 @@ export const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
   if (!supabase) return config;
-  const { data } = await supabase.auth.getSession();
-  if (data.session?.access_token) config.headers.Authorization = `Bearer ${data.session.access_token}`;
+  const session = await getValidSession();
+  if (session?.access_token) config.headers.Authorization = `Bearer ${session.access_token}`;
   return config;
 });
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const request = error.config;
+    if (error.response?.status === 401 && supabase && request && !request._authRetry) {
+      request._authRetry = true;
+      const session = await getValidSession(true);
+      if (session?.access_token) {
+        request.headers.Authorization = `Bearer ${session.access_token}`;
+        return api(request);
+      }
+    }
     if (error.response?.status === 401) window.dispatchEvent(new Event('promptly:unauthorized'));
     return Promise.reject(error);
   },

@@ -1,19 +1,13 @@
-import { ArrowLeft, Archive, Home, LoaderCircle, LogOut, Plus, Search, Sparkles } from 'lucide-react';
+import { ArrowLeft, Archive, Home, LoaderCircle, Plus, Search, Sparkles, UserRound } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '../providers/AuthProvider';
 
 export function AppShell({ children }) {
   const [location] = useLocation();
-  const { signOut } = useAuth();
-  const queryClient = useQueryClient();
-  const logout = async () => { queryClient.clear(); await signOut(); };
-  const navigation = [{ to: '/home', label: 'Library', icon: Home }, { to: '/folders/new', label: 'New', icon: Plus, featured: true }, { to: '/settings', label: 'Archive', icon: Archive }];
+  const navigation = [{ to: '/home', label: 'Library', icon: Home }, { to: '/folders/new', label: 'New', icon: Plus, featured: true }, { to: '/settings', label: 'Archive', icon: Archive }, { to: '/profile', label: 'Profile', icon: UserRound }];
   return <div className="app-background min-h-screen">
     <main className="relative z-10 min-h-screen pb-32">{children}</main>
-    <nav aria-label="Primary navigation" className="glass fixed bottom-5 left-1/2 z-40 flex h-[72px] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-full px-2 shadow-[0_20px_50px_rgba(0,0,0,.14)]">
-      {navigation.map(({ to, label, icon: Icon, featured }) => { const active = location === to || (!featured && to === '/home' && location.startsWith('/folder')); return <Link key={to} href={to} className={`focus-ring flex min-w-20 items-center justify-center rounded-full transition duration-200 ${featured ? 'size-14 min-w-14 bg-black text-white shadow-lg shadow-black/20 hover:-translate-y-0.5' : `h-12 gap-2 px-3 text-xs font-medium ${active ? 'bg-white/80 text-ink' : 'text-muted hover:text-ink'}`}`}><Icon size={featured ? 22 : 18} /><span className={featured ? 'sr-only' : 'hidden sm:inline'}>{label}</span></Link>; })}
-      <button onClick={logout} aria-label="Sign out" title="Sign out" className="focus-ring grid size-12 place-items-center rounded-full text-muted transition hover:bg-white/70 hover:text-ink"><LogOut size={18} /></button>
+    <nav aria-label="Primary navigation" className="glass fixed bottom-5 left-1/2 z-40 flex h-[72px] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 items-center justify-around rounded-full px-2 shadow-[0_20px_50px_rgba(0,0,0,.14)]">
+      {navigation.map(({ to, label, icon: Icon, featured }) => { const active = location === to || (!featured && to === '/home' && location.startsWith('/folder')); return <Link key={to} href={to} className={`focus-ring flex items-center justify-center rounded-full transition duration-200 ${featured ? 'size-14 min-w-14 bg-black text-white shadow-lg shadow-black/20 hover:-translate-y-0.5' : `h-12 min-w-14 gap-2 px-3 text-xs font-medium sm:min-w-20 ${active ? 'bg-white/80 text-ink' : 'text-muted hover:text-ink'}`}`}><Icon size={featured ? 22 : 18} /><span className={featured ? 'sr-only' : 'hidden sm:inline'}>{label}</span></Link>; })}
     </nav>
   </div>;
 }

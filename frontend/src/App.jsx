@@ -8,6 +8,7 @@ import FolderForm from './pages/FolderForm';
 import CategoryForm from './pages/CategoryForm';
 import PromptForm from './pages/PromptForm';
 import Settings from './pages/Settings';
+import Profile from './pages/Profile';
 import Login, { AuthLoading, AuthSetupRequired } from './pages/Login';
 import { useAuth } from './providers/AuthProvider';
 
@@ -29,6 +30,7 @@ export default function App() {
     <Route path="/prompts/:id/edit"><PromptForm /></Route>
     <Route path="/prompts/:id"><PromptDetail /></Route>
     <Route path="/settings"><Settings /></Route>
+    <Route path="/profile"><Profile /></Route>
     <Route><Redirect to="/home" /></Route>
   </Switch></AppShell>;
 }

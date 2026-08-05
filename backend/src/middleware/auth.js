@@ -20,15 +20,17 @@ export async function requireAuth(request, response, next) {
   if (!match) return response.status(401).json({ error: 'Authentication required.' });
 
   try {
-    const { data, error } = await supabase.auth.getClaims(match[1]);
-    const claims = data?.claims;
-    if (error || !claims?.sub) return response.status(401).json({ error: 'Invalid or expired session.' });
-    if (claims.sub !== allowedUserId) return response.status(403).json({ error: 'This account is not authorized.' });
+    const { data, error } = await supabase.auth.getUser(match[1]);
+    const user = data?.user;
+    if (error || !user?.id) {
+      if (error?.status >= 500) return response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
+      return response.status(401).json({ error: 'Invalid or expired session.' });
+    }
+    if (user.id !== allowedUserId) return response.status(403).json({ error: 'This account is not authorized.' });
 
-    request.auth = { userId: claims.sub, email: claims.email };
+    request.auth = { userId: user.id, email: user.email };
     next();
   } catch {
-    response.status(401).json({ error: 'Unable to verify this session.' });
+    response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
   }
 }
-
