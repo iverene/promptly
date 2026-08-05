@@ -1,24 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useParams } from 'wouter';
 import { z } from 'zod';
 import { categoriesApi, promptsApi } from '../api/resources';
 import { apiMessage } from '../api/client';
-import { CategoryPicker } from '../components/CategoryPicker';
 import { Button, ErrorState, Field, Header, Page } from '../components/ui';
 import { useToast } from '../providers/ToastProvider';
 
 const schema = z.object({
-  categoryId: z.string().optional(),
+  categoryId: z.string().min(1, 'Select or add a category'),
   categoryName: z.string().trim().max(120, 'Category name is too long').optional(),
   title: z.string().trim().min(1, 'Title is required').max(180),
   content: z.string().trim().min(1, 'Prompt is required').max(30000),
   notes: z.string().trim().max(10000).optional(),
-}).superRefine((values, context) => {
-  if (!values.categoryId && !values.categoryName) context.addIssue({ code: 'custom', path: ['categoryName'], message: 'Choose a category or enter a new one' });
 });
 
 export default function PromptForm() {
@@ -29,7 +26,6 @@ export default function PromptForm() {
   const [, navigate] = useLocation();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const [categoryOpen, setCategoryOpen] = useState(false);
   const prompt = useQuery({ queryKey: ['prompt', id], queryFn: () => promptsApi.get(id), enabled: editing });
   const sourceCategoryId = prompt.data?.categoryId || initialCategoryId;
   const sourceCategory = useQuery({ queryKey: ['category', sourceCategoryId], queryFn: () => categoriesApi.get(sourceCategoryId), enabled: Boolean(sourceCategoryId) });
@@ -44,7 +40,6 @@ export default function PromptForm() {
   const selected = watch('categoryId');
   const categoryName = watch('categoryName') || '';
   const selectedCategory = categories.data?.find((item) => item.id === selected);
-  const categoryLabel = selectedCategory?.name || categoryName.trim() || (selected ? sourceCategory.data?.name : '') || 'Select a category';
 
   const createCategory = useMutation({
     mutationFn: () => categoriesApi.create({ folderId, name: categoryName.trim() }),
@@ -53,20 +48,14 @@ export default function PromptForm() {
       queryClient.invalidateQueries({ queryKey: ['folder', folderId] });
       setValue('categoryId', created.id, { shouldValidate: true });
       setValue('categoryName', '', { shouldValidate: true });
-      setCategoryOpen(false);
-      toast('Category added');
+      toast('Category created');
     },
     onError: (error) => toast(apiMessage(error), 'error'),
   });
 
   const save = useMutation({
-    mutationFn: async ({ categoryName: newCategoryName, ...values }) => {
-      let categoryId = values.categoryId;
-      if (!categoryId) {
-        const category = await categoriesApi.create({ folderId, name: newCategoryName });
-        categoryId = category.id;
-      }
-      const payload = { ...values, categoryId };
+    mutationFn: async ({ categoryName: _categoryName, ...values }) => {
+      const payload = values;
       return editing ? promptsApi.update(id, payload) : promptsApi.create(payload);
     },
     onSuccess: (saved) => {
@@ -85,11 +74,19 @@ export default function PromptForm() {
   return <Page className="max-w-5xl">
     <Header title={editing ? 'Edit prompt' : 'Create prompt'} back={editing ? `/prompts/${id}` : folderId ? `/folders/${folderId}` : '/home'} />
     <form className="mt-8 grid gap-7" onSubmit={handleSubmit((values) => save.mutate(values))}>
-      <fieldset>
+      <fieldset className="grid gap-3">
         <legend className="mb-3 text-xs font-medium uppercase tracking-[.12em] text-secondary">Category</legend>
-        <button type="button" aria-haspopup="dialog" aria-expanded={categoryOpen} onClick={() => setCategoryOpen(true)} className="focus-ring flex h-13 w-full items-center justify-between gap-4 rounded-none border border-black/20 bg-white/76 px-4 text-left text-sm transition hover:bg-white"><span className={selected || categoryName.trim() ? 'text-ink' : 'text-muted'}>{categoryLabel}</span><ChevronDown size={18} className="shrink-0" /></button>
+        <select value={selected} onChange={(event) => { setValue('categoryId', event.target.value, { shouldValidate: true }); setValue('categoryName', '', { shouldValidate: true }); }} disabled={!folderId || categories.isLoading} className="focus-ring h-13 w-full border border-black/20 bg-white/76 px-4 text-sm text-ink disabled:opacity-50">
+          <option value="">Select an existing category</option>
+          {selected && !selectedCategory && sourceCategory.data && <option value={selected}>{sourceCategory.data.name}</option>}
+          {categories.data?.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+        </select>
+        <div className="flex gap-2">
+          <input value={categoryName} onChange={(event) => { createCategory.reset(); setValue('categoryName', event.target.value, { shouldValidate: true }); if (event.target.value) setValue('categoryId', '', { shouldValidate: true }); }} onKeyDown={(event) => { if (event.key === 'Enter' && folderId && categoryName.trim() && !createCategory.isPending) { event.preventDefault(); createCategory.mutate(); } }} autoComplete="off" data-form-type="other" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" placeholder="Add a new category" aria-label="New category name" className="focus-ring h-13 min-w-0 flex-1 border border-black/20 bg-white/76 px-4 text-sm placeholder:text-muted" />
+          <button type="button" onClick={() => createCategory.mutate()} disabled={!folderId || !categoryName.trim() || createCategory.isPending} className="focus-ring inline-flex h-13 shrink-0 items-center justify-center gap-2 border border-black bg-black px-4 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50">{createCategory.isPending ? 'Adding…' : <><Plus size={17} />Add</>}</button>
+        </div>
         {categories.isError && <p className="mt-2 text-xs text-danger">{apiMessage(categories.error)}</p>}
-        {errors.categoryName && <p className="mt-2 text-xs text-danger">{errors.categoryName.message}</p>}
+        {errors.categoryId && <p className="mt-2 text-xs text-danger">{errors.categoryId.message}</p>}
       </fieldset>
       <input type="hidden" {...register('categoryId')} />
       <input type="hidden" {...register('categoryName')} />
@@ -98,18 +95,5 @@ export default function PromptForm() {
       <Field label="Notes (optional)" placeholder="Usage tips, settings, or reminders" multiline className="min-h-32" error={errors.notes?.message} {...register('notes')} />
       <div className="flex justify-end"><Button type="submit" title={editing ? 'Save changes' : 'Save prompt'} loading={save.isPending} disabled={!folderId || categories.isLoading} /></div>
     </form>
-    <CategoryPicker
-      open={categoryOpen}
-      onClose={() => setCategoryOpen(false)}
-      categories={categories.data}
-      loading={categories.isLoading}
-      selected={selected}
-      categoryName={categoryName}
-      onNameChange={(name) => { createCategory.reset(); setValue('categoryName', name, { shouldValidate: true }); if (name) setValue('categoryId', '', { shouldValidate: true }); }}
-      onSelect={(categoryId) => { setValue('categoryId', categoryId, { shouldValidate: true }); setValue('categoryName', '', { shouldValidate: true }); }}
-      onCreate={() => createCategory.mutate()}
-      creating={createCategory.isPending}
-      error={createCategory.isError ? apiMessage(createCategory.error) : errors.categoryName?.message}
-    />
   </Page>;
 }

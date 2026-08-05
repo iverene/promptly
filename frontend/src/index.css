@@ -5,8 +5,8 @@
   --color-canvas: #f7f7f5;
   --color-canvas-secondary: #eeeeeb;
   --color-ink: #111111;
-  --color-secondary: #3f3f3b;
-  --color-muted: #5f5f59;
+  --color-secondary: #242422;
+  --color-muted: #41413d;
   --color-success: #1f7a4d;
   --color-danger: #b42318;
 }
@@ -42,14 +42,14 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 @media (min-width: 640px) { .page-shell { padding-top: 32px; } }
 .glass {
   background: linear-gradient(135deg, rgba(255,255,255,.66), rgba(255,255,255,.38));
-  border: 2px solid rgba(10, 10, 10, .42);
+  border: 2px solid rgba(10, 10, 10, .58);
   box-shadow: 0 20px 60px rgba(17, 17, 17, .075), inset 0 1px rgba(255,255,255,.95), inset 0 -1px rgba(255,255,255,.35);
   backdrop-filter: blur(32px) saturate(145%);
   -webkit-backdrop-filter: blur(32px) saturate(145%);
 }
 .glass-strong {
   background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,255,255,.56));
-  border: 2px solid rgba(10, 10, 10, .46);
+  border: 2px solid rgba(10, 10, 10, .62);
   box-shadow: 0 24px 70px rgba(17, 17, 17, .085), inset 0 1px rgba(255,255,255,1);
   backdrop-filter: blur(38px) saturate(150%);
   -webkit-backdrop-filter: blur(38px) saturate(150%);
@@ -198,12 +198,12 @@ form div:has(> input:not([type="hidden"]):not([type="checkbox"]):not([type="radi
 }
 
 /* Higher-contrast surface borders. Navigation keeps its separate white glass edge. */
-.border-black\/6 { border-color: rgba(0,0,0,.2); }
-.border-black\/8, .border-black\/10 { border-color: rgba(0,0,0,.3); }
-.border-black\/15 { border-color: rgba(0,0,0,.32); }
-.border-black\/20 { border-color: rgba(0,0,0,.42); }
-.border-black\/25 { border-color: rgba(0,0,0,.46); }
-.border-black\/30 { border-color: rgba(0,0,0,.52); }
+.border-black\/6 { border-color: rgba(0,0,0,.28); }
+.border-black\/8, .border-black\/10 { border-color: rgba(0,0,0,.38); }
+.border-black\/15 { border-color: rgba(0,0,0,.46); }
+.border-black\/20 { border-color: rgba(0,0,0,.56); }
+.border-black\/25 { border-color: rgba(0,0,0,.60); }
+.border-black\/30 { border-color: rgba(0,0,0,.66); }
 
 .soft-enter { animation: soft-enter .22s ease-out both; }
 .toast-enter { animation: toast-enter .22s ease-out both; }
