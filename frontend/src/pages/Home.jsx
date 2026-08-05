@@ -18,7 +18,7 @@ export default function Home() {
   return <Page>
     <header className="pb-7 sm:pb-10">
       <div className="flex items-end justify-between gap-5">
-        <h1 className="text-[clamp(3rem,9vw,6rem)] leading-[.82] tracking-[-.055em] text-ink lg:hidden">Promptly</h1>
+        <h1 className="text-[clamp(2.5rem,8vw,4.5rem)] leading-[.82] tracking-[-.055em] text-ink lg:hidden">Promptly</h1>
         <ProfileButton displayName={displayName} onClick={() => navigate('/profile')} />
       </div>
     </header>

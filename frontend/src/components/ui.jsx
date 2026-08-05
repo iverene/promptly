@@ -19,7 +19,7 @@ export function AppShell({ children }) {
   const categoryMatch = location.match(/^\/categories\/([^/]+)$/);
   const createAction = categoryMatch ? { to: `/categories/${categoryMatch[1]}/prompts/new`, label: 'Create prompt' } : null;
   return <div className="app-background min-h-screen">
-    <main className="relative z-10 min-h-screen pb-32 lg:pb-10 lg:pl-[13.5rem]">{children}</main>
+    <main className="relative z-10 min-h-screen pb-28 lg:pb-10 lg:pl-[13.5rem]">{children}</main>
     <nav aria-label="Primary navigation" className="primary-nav">
       <Link href="/home" className="primary-nav__brand focus-ring">Promptly</Link>
       <div className="primary-nav__items">
@@ -59,7 +59,7 @@ export function IconButton({ icon: Icon, onClick, label, danger = false, type = 
 }
 
 export function AddButton({ onClick, label, embedded = false }) {
-  const button = <button type="button" onClick={onClick} aria-label={label} title={label} className={`focus-ring z-40 grid size-14 place-items-center rounded-full bg-black text-white transition duration-200 hover:-translate-y-1 hover:bg-zinc-800 ${embedded ? 'mb-5' : 'fixed bottom-32 right-5 sm:right-8 lg:bottom-10 lg:right-10'}`}><Plus size={21} /></button>;
+  const button = <button type="button" onClick={onClick} aria-label={label} title={label} className={`focus-ring z-40 grid size-13 place-items-center rounded-full bg-black text-white transition duration-200 hover:-translate-y-1 hover:bg-zinc-800 ${embedded ? 'mb-5' : 'fixed bottom-28 right-5 sm:right-8 lg:bottom-10 lg:right-10'}`}><Plus size={20} /></button>;
   return embedded ? button : createPortal(button, document.body);
 }
 

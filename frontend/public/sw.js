@@ -1,4 +1,4 @@
-const CACHE_NAME = 'promptly-shell-v3';
+const CACHE_NAME = 'promptly-shell-v4';
 const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/pwa-192.png', '/pwa-512.png', '/pwa-maskable-512.png'];
 
 self.addEventListener('install', (event) => {

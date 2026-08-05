@@ -15,30 +15,26 @@
     {
       "source": "/api(/.*)?",
       "destination": {
-        "type": "service",
         "service": "backend"
       }
     },
     {
       "source": "/assets/(.*)",
       "destination": {
-        "type": "service",
         "service": "frontend"
       }
     },
     {
       "source": "/(sw.js|manifest.webmanifest|favicon.svg|pwa-192.png|pwa-512.png|pwa-maskable-512.png)",
       "destination": {
-        "type": "service",
         "service": "frontend"
       }
     },
     {
       "source": "/(.*)",
       "destination": {
-        "type": "service",
         "service": "frontend",
-        "path": "/index.html"
+        "path": "/"
       }
     }
   ],
