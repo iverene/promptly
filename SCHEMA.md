@@ -4,6 +4,7 @@
 - id
 - name
 - description
+- color
 - is_archived
 - created_at
 - updated_at

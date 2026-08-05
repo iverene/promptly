@@ -32,12 +32,12 @@ GET/POST/PATCH/DELETE
 - /categories
 - /prompts
 
-Creating a folder creates only the folder. Categories are prompt metadata: the
-prompt form lets the user select an existing category in that folder or create
-a new category inline before saving the prompt.
+Creating a folder creates only the folder and its selected pastel color.
+Categories are added explicitly from the folder screen; no categories are
+generated automatically.
 
-The folder detail API queries prompts through their category's `folder_id`, so
-opening a folder displays its prompts directly.
+Opening a folder displays its categories. Opening a category displays its
+prompts, and prompt cards retain their folder and category context.
 
 Frontend responsibilities:
 - UI

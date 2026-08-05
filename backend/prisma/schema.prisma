@@ -12,6 +12,7 @@ model Folder {
   id          String     @id @default(cuid())
   name        String
   description String?
+  color       String     @default("#F3EEDF")
   isArchived  Boolean    @default(false) @map("is_archived")
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
@@ -54,4 +55,3 @@ model Prompt {
   @@index([title])
   @@map("prompts")
 }
-

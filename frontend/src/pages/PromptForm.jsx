@@ -62,12 +62,12 @@ export default function PromptForm() {
   if (prompt.isError) return <Page><Header title="Edit prompt" back /><div className="pt-6"><ErrorState message={apiMessage(prompt.error)} retry={prompt.refetch} /></div></Page>;
   if (sourceCategory.isError) return <Page><Header title={editing ? 'Edit prompt' : 'Create prompt'} back /><div className="pt-6"><ErrorState message={apiMessage(sourceCategory.error)} retry={sourceCategory.refetch} /></div></Page>;
 
-  return <Page className="max-w-5xl"><Header title={editing ? 'Edit prompt' : 'Create prompt'} back /><form className="glass-strong mt-6 grid gap-6 rounded-[26px] p-5 sm:p-8" onSubmit={handleSubmit((values) => save.mutate(values))}>
+  return <Page className="max-w-5xl"><Header title={editing ? 'Edit prompt' : 'Create prompt'} subtitle="File a reusable fashion prompt" back /><form className="glass-strong mt-8 grid gap-7 rounded-[30px] p-5 sm:p-8" onSubmit={handleSubmit((values) => save.mutate(values))}>
     <fieldset>
-      <legend className="mb-2 text-sm font-medium">Category</legend>
+      <legend className="mb-3 text-xs font-medium uppercase tracking-[.12em] text-secondary">Category</legend>
       <div className="flex flex-wrap gap-2">
-        {categories.data?.map((item) => <button type="button" key={item.id} onClick={() => { setValue('categoryId', item.id, { shouldValidate: true }); setValue('categoryName', '', { shouldValidate: true }); }} className={`focus-ring min-h-11 rounded-2xl border px-4 text-sm font-medium transition ${selected === item.id ? 'border-black bg-black text-white' : 'border-black/10 bg-white/75 text-ink hover:bg-white'}`}>{item.name}</button>)}
-        <button type="button" onClick={() => setValue('categoryId', '', { shouldValidate: true })} className={`focus-ring min-h-11 rounded-2xl border px-4 text-sm font-medium transition ${!selected ? 'border-black bg-black text-white' : 'border-black/10 bg-white/75 text-ink hover:bg-white'}`}>+ New category</button>
+        {categories.data?.map((item) => <button type="button" key={item.id} onClick={() => { setValue('categoryId', item.id, { shouldValidate: true }); setValue('categoryName', '', { shouldValidate: true }); }} className={`focus-ring min-h-11 rounded-full border px-4 text-sm font-medium transition ${selected === item.id ? 'border-black bg-black text-white' : 'border-black/10 bg-white/65 text-ink hover:bg-white'}`}>{item.name}</button>)}
+        <button type="button" onClick={() => setValue('categoryId', '', { shouldValidate: true })} className={`focus-ring min-h-11 rounded-full border px-4 text-sm font-medium transition ${!selected ? 'border-black bg-black text-white' : 'border-black/10 bg-white/65 text-ink hover:bg-white'}`}>+ New category</button>
       </div>
       {categories.isError && <p className="mt-2 text-xs text-danger">{apiMessage(categories.error)}</p>}
     </fieldset>
