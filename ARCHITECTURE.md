@@ -2,7 +2,7 @@
 
 ## Structure
 
-React Native + Expo
+React + Vite Website
       |
    Axios
       |
@@ -39,11 +39,20 @@ Rollback if any step fails.
 
 Frontend responsibilities:
 - UI
-- Navigation
+- Responsive client-side navigation with Wouter
 - Search
 - Copy
 - Forms
 - API calls
+
+Frontend implementation:
+- React
+- Vite
+- Tailwind CSS
+- TanStack Query
+- React Hook Form + Zod
+- Axios
+- Lucide React
 
 Backend responsibilities:
 - CRUD

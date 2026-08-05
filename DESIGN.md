@@ -1,5 +1,7 @@
 # Promptly — Design Specification
 
+> Web implementation: The original mobile-first visual system is preserved in a responsive React website. Compact screens use bottom navigation and single-column content; desktop screens use a persistent sidebar and multi-column grids. Touch targets, readable prompt surfaces, and restrained glass effects remain unchanged.
+
 ## 1. Design Direction
 
 Promptly should use a **minimal black-and-white glass-fluid interface inspired by modern iOS design**.
