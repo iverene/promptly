@@ -1,17 +1,22 @@
-import { ArrowLeft, Archive, FolderHeart, Home, LoaderCircle, Plus, Search, Settings, Sparkles } from 'lucide-react';
+import { ArrowLeft, Archive, FolderHeart, Home, LoaderCircle, LogOut, Plus, Search, Sparkles } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../providers/AuthProvider';
 
 export function AppShell({ children }) {
   const [location] = useLocation();
+  const { user, signOut } = useAuth();
+  const queryClient = useQueryClient();
+  const logout = async () => { queryClient.clear(); await signOut(); };
   const navigation = [{ to: '/home', label: 'Library', icon: Home }, { to: '/settings', label: 'Archive', icon: Archive }];
   return <div className="app-background min-h-screen">
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-black/5 bg-white/55 p-5 backdrop-blur-2xl lg:flex lg:flex-col">
       <Link href="/home" className="focus-ring mb-10 flex items-center gap-3 rounded-2xl"><span className="grid size-11 place-items-center rounded-2xl bg-black text-lg font-semibold text-white">P</span><span><span className="block text-xl font-semibold tracking-[-.5px]">Promptly</span><span className="text-xs text-muted">Fashion prompt library</span></span></Link>
       <nav className="space-y-2">{navigation.map(({ to, label, icon: Icon }) => { const active = location === to; return <Link key={to} href={to} className={`focus-ring flex min-h-12 items-center gap-3 rounded-2xl px-4 text-sm font-medium transition ${active ? 'bg-black text-white shadow-lg shadow-black/10' : 'text-secondary hover:bg-white/70 hover:text-ink'}`}><Icon size={19} /><span>{label}</span></Link>; })}</nav>
-      <div className="mt-auto rounded-[22px] border border-white/80 bg-white/65 p-4"><FolderHeart className="mb-3" size={21} /><p className="text-sm font-semibold">Keep ideas close.</p><p className="mt-1 text-xs leading-5 text-muted">Organize reusable prompts without the clutter.</p></div>
+      <div className="mt-auto rounded-[22px] border border-white/80 bg-white/65 p-4"><FolderHeart className="mb-3" size={21} /><p className="truncate text-sm font-semibold">{user?.email}</p><p className="mt-1 text-xs leading-5 text-muted">Private library</p><button onClick={logout} className="focus-ring mt-4 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/70 text-xs font-semibold hover:bg-white"><LogOut size={16} />Sign out</button></div>
     </aside>
     <main className="min-h-screen pb-24 lg:ml-64 lg:pb-0">{children}</main>
-    <nav className="glass fixed inset-x-4 bottom-4 z-40 flex h-16 items-center justify-around rounded-[22px] px-2 lg:hidden">{navigation.map(({ to, label, icon: Icon }) => <Link key={to} href={to} className={`focus-ring flex min-w-24 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium ${location === to ? 'text-ink' : 'text-muted'}`}><Icon size={20} /><span>{label}</span></Link>)}<Link href="/folders/new" className="focus-ring flex min-w-24 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium text-muted"><Plus size={20} /><span>New folder</span></Link></nav>
+    <nav className="glass fixed inset-x-4 bottom-4 z-40 flex h-16 items-center justify-around rounded-[22px] px-1 lg:hidden">{navigation.map(({ to, label, icon: Icon }) => <Link key={to} href={to} className={`focus-ring flex min-w-16 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium ${location === to ? 'text-ink' : 'text-muted'}`}><Icon size={20} /><span>{label}</span></Link>)}<Link href="/folders/new" className="focus-ring flex min-w-16 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium text-muted"><Plus size={20} /><span>New</span></Link><button onClick={logout} className="focus-ring flex min-w-16 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium text-muted"><LogOut size={20} /><span>Sign out</span></button></nav>
   </div>;
 }
 

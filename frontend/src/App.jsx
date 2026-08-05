@@ -8,8 +8,14 @@ import FolderForm from './pages/FolderForm';
 import CategoryForm from './pages/CategoryForm';
 import PromptForm from './pages/PromptForm';
 import Settings from './pages/Settings';
+import Login, { AuthLoading, AuthSetupRequired } from './pages/Login';
+import { useAuth } from './providers/AuthProvider';
 
 export default function App() {
+  const { configured, loading, session } = useAuth();
+  if (loading) return <AuthLoading />;
+  if (!configured) return <AuthSetupRequired />;
+  if (!session) return <Login />;
   return <AppShell><Switch>
     <Route path="/home"><Home /></Route>
     <Route path="/folders/new"><FolderForm /></Route>

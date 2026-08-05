@@ -4,9 +4,11 @@
 
 React + Vite Website
       |
-   Axios
+Supabase Auth + Axios
       |
 Express API
+      |
+JWT verification + allowlist
       |
 Controllers
       |
@@ -44,6 +46,7 @@ Frontend responsibilities:
 - Copy
 - Forms
 - API calls
+- Authentication and session handling
 
 Frontend implementation:
 - React
@@ -56,6 +59,8 @@ Frontend implementation:
 
 Backend responsibilities:
 - CRUD
+- Authentication and authorization
+- Rate limiting
 - Validation
 - Transactions
 - Business logic
