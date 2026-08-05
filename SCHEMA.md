@@ -16,12 +16,8 @@
 - created_at
 - updated_at
 
-Default categories created with every new folder:
-- Image
-- Video
-- Movements
-
-Users may add more categories.
+Categories are created explicitly from the prompt form. A new folder starts
+empty, and a prompt must select an existing category or create a new one.
 
 ## prompts
 - id
@@ -51,7 +47,8 @@ Search:
 
 No users table.
 No tags.
-No authentication.
+Authentication is handled by Supabase Auth. The API permits the allowlisted
+user ID and does not store a separate user record.
 No AI generation tables.
 No generated outputs.
 No prompt versions.

@@ -21,6 +21,7 @@ export default function App() {
     <Route path="/folders/new"><FolderForm /></Route>
     <Route path="/folders/:id/edit"><FolderForm /></Route>
     <Route path="/folders/:folderId/categories/new"><CategoryForm /></Route>
+    <Route path="/folders/:folderId/prompts/new"><PromptForm /></Route>
     <Route path="/folders/:id"><FolderDetail /></Route>
     <Route path="/categories/:id/edit"><CategoryForm /></Route>
     <Route path="/categories/:categoryId/prompts/new"><PromptForm /></Route>

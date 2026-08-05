@@ -12,8 +12,8 @@ export default function PromptDetail() {
   const { id } = useParams(); const [, navigate] = useLocation(); const toast = useToast(); const queryClient = useQueryClient(); const [deleting, setDeleting] = useState(false);
   const prompt = useQuery({ queryKey: ['prompt', id], queryFn: () => promptsApi.get(id) });
   const favorite = useMutation({ mutationFn: (isFavorite) => promptsApi.update(id, { isFavorite }), onSuccess: (saved) => { queryClient.setQueryData(['prompt', id], saved); queryClient.invalidateQueries({ queryKey: ['prompts'] }); toast(saved.isFavorite ? 'Added to favorites' : 'Removed from favorites'); }, onError: (e) => toast(apiMessage(e), 'error') });
-  const archive = useMutation({ mutationFn: () => promptsApi.update(id, { isArchived: true }), onSuccess: (saved) => { queryClient.invalidateQueries({ queryKey: ['prompts'] }); toast('Prompt archived'); navigate(`/categories/${saved.categoryId}`); }, onError: (e) => toast(apiMessage(e), 'error') });
-  const remove = useMutation({ mutationFn: () => promptsApi.remove(id), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['prompts'] }); toast('Prompt deleted'); navigate('/home'); }, onError: (e) => toast(apiMessage(e), 'error') });
+  const archive = useMutation({ mutationFn: () => promptsApi.update(id, { isArchived: true }), onSuccess: (saved) => { queryClient.invalidateQueries({ queryKey: ['prompts'] }); toast('Prompt archived'); navigate(`/folders/${saved.category.folder.id}`); }, onError: (e) => toast(apiMessage(e), 'error') });
+  const remove = useMutation({ mutationFn: () => promptsApi.remove(id), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['prompts'] }); toast('Prompt deleted'); navigate(`/folders/${prompt.data.category.folder.id}`); }, onError: (e) => toast(apiMessage(e), 'error') });
   if (prompt.isLoading) return <Page><Header title="Prompt" back /><div className="pt-6"><LoadingCards count={2} /></div></Page>;
   if (prompt.isError) return <Page><Header title="Prompt" back /><div className="pt-6"><ErrorState message={apiMessage(prompt.error)} retry={prompt.refetch} /></div></Page>;
   const data = prompt.data;

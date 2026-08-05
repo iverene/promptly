@@ -142,7 +142,7 @@ Glass surfaces should be used for:
 - Top navigation bars
 - Search bars
 - Folder cards
-- Category cards
+- Category selector chips
 - Bottom sheets
 - Floating action buttons
 - Sticky action bars
@@ -321,7 +321,6 @@ Each card should display:
 
 - Folder name
 - Optional description
-- Number of categories
 - Total prompt count
 - Updated date
 - Overflow action
@@ -344,96 +343,91 @@ Use a subtle opacity or elevation change.
 
 ## 12. Folder Screen
 
-Opening a folder should display the categories inside it.
+Opening a folder should display the prompts inside it.
 
 Example:
 
 ```text
 Dress
 
-Image
-Video
-Movements
-+ Add Category
+Search prompts
+
+Editorial silhouette
+Studio lookbook
+Runway movement
++ Create Prompt
 ```
 
-Each category card should show:
+Each prompt card should show:
 
+- Prompt title
+- Short prompt preview
 - Category name
-- Prompt count
-- Optional icon
-- Overflow action
+- Updated date
+- Favorite and copy actions
 
-The screen should allow quick switching between Image, Video, and Movements.
+The screen should support searching all prompts in the folder. Creating a
+prompt opens a form where the category is selected or created inline.
 
 Recommended layout:
 
-- Horizontal category cards on compact screens, or
-- Two-column grid on larger screens
+- Single-column prompt cards on compact screens, or
+- Two- or three-column prompt grid on larger screens
 
-The three default categories should appear first:
-
-1. Image
-2. Video
-3. Movements
-
-Custom categories appear after them.
+New folders must not create default categories.
 
 ---
 
-## 13. Category Cards
+## 13. Category Selector
 
-Category cards should use lighter glass than folder cards.
+Categories are metadata selected while creating or editing a prompt. Display
+existing categories as compact selector chips, followed by a `+ New category`
+choice.
 
 Recommended appearance:
 
-- Frosted white surface
-- Minimal shadow
-- Thin border
-- Monochrome icon
-- Category name
-- Prompt count
+- High-contrast selected state
+- Thin borders for unselected choices
+- Clear category names
+- A text field when `+ New category` is selected
 
-Pressing a category should use:
+Pressing a category choice should use:
 
 - Subtle opacity change
 - Small 1–2px downward movement
-- Light haptic feedback
 
 Avoid bounce-heavy interactions.
 
 ---
 
-## 14. Category Screen
+## 14. Prompt Creation Flow
 
-The Category screen displays prompts inside the selected folder and category.
+Prompt creation starts from the open folder and includes category selection in
+the form.
 
 Example:
 
 ```text
-Dress / Movements
+Create prompt
 
-Search prompts
-
-Cute dress movements
-Elegant side turns
-Touching and adjusting the dress
-Mirror-shot continuous movement
+Category: [Editorial] [Movement] [+ New category]
+Title
+Prompt
+Notes
+Save prompt
 ```
 
 Include:
 
 - Back navigation
-- Folder and category context
-- Search field
-- Prompt list
-- Create Prompt action
-- Loading skeletons
-- Empty state
+- Existing category choices for the current folder
+- Inline new-category input
+- Title, prompt content, and notes fields
+- Save action and validation feedback
 
 The header may use a glass navigation bar.
 
-The prompt list itself should remain highly readable.
+After saving, the prompt appears directly in the folder's prompt list.
 
 ---
 
@@ -593,11 +587,10 @@ The prompt textarea should use:
 Use glass bottom sheets for:
 
 - Folder actions
-- Category actions
 - Prompt actions
 - Sort options
 - Delete confirmation
-- Add Category
+- Create Prompt
 - Create Folder
 
 Recommended appearance:
@@ -653,7 +646,7 @@ Use:
 Create skeletons for:
 
 - Folder cards
-- Category cards
+- Category selector chips
 - Prompt cards
 - Prompt detail
 - Search results
@@ -670,16 +663,10 @@ Empty states should remain minimal.
 **Text:** Create your first fashion folder to organize your prompts.  
 **Action:** Create Folder
 
-### No Categories
-
-**Title:** No categories yet  
-**Text:** Add a category to start organizing prompts in this folder.  
-**Action:** Add Category
-
-### Empty Category
+### Empty Folder
 
 **Title:** No prompts here yet  
-**Text:** Create your first prompt in this category.  
+**Text:** Create a prompt, then choose or create its category in the form.
 **Action:** Create Prompt
 
 ### No Search Results

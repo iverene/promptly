@@ -4,10 +4,11 @@ import { HttpError } from '../lib/http.js';
 const context = { category: { include: { folder: { select: { id: true, name: true } } } } };
 
 export const promptService = {
-  list({ categoryId, search = '', archived = false, favorite, recent, limit = 50 }) {
+  list({ folderId, categoryId, search = '', archived = false, favorite, recent, limit = 50 }) {
     return prisma.prompt.findMany({
       where: {
         isArchived: archived,
+        ...(folderId ? { category: { folderId } } : {}),
         ...(categoryId ? { categoryId } : {}),
         ...(favorite !== undefined ? { isFavorite: favorite } : {}),
         ...(search ? { OR: [
@@ -30,4 +31,3 @@ export const promptService = {
   update(id, data) { return prisma.prompt.update({ where: { id }, data, include: context }); },
   remove(id) { return prisma.prompt.delete({ where: { id } }); },
 };
-

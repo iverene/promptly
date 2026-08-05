@@ -4,7 +4,7 @@ import { parseArchived } from '../lib/http.js';
 export const promptController = {
   async list(req, res) {
     res.json(await promptService.list({
-      categoryId: req.query.categoryId, search: req.query.search,
+      folderId: req.query.folderId, categoryId: req.query.categoryId, search: req.query.search,
       archived: parseArchived(req.query.archived),
       favorite: req.query.favorite === undefined ? undefined : req.query.favorite === 'true',
       recent: req.query.recent === 'true', limit: Math.min(Number(req.query.limit) || 50, 100),
@@ -15,4 +15,3 @@ export const promptController = {
   async update(req, res) { res.json(await promptService.update(req.params.id, req.body)); },
   async remove(req, res) { await promptService.remove(req.params.id); res.status(204).end(); },
 };
-

@@ -1,7 +1,6 @@
 import { prisma } from '../config/prisma.js';
 import { HttpError } from '../lib/http.js';
 
-const defaultCategories = ['Image', 'Video', 'Movements'];
 const includeSummary = {
   categories: {
     orderBy: { sortOrder: 'asc' },
@@ -23,13 +22,7 @@ export const folderService = {
     return folder;
   },
   create(data) {
-    return prisma.$transaction((tx) => tx.folder.create({
-      data: {
-        ...data,
-        categories: { create: defaultCategories.map((name, sortOrder) => ({ name, sortOrder })) },
-      },
-      include: includeSummary,
-    }));
+    return prisma.folder.create({ data, include: includeSummary });
   },
   update(id, data) {
     return prisma.folder.update({ where: { id }, data, include: includeSummary });
@@ -38,4 +31,3 @@ export const folderService = {
     return prisma.folder.delete({ where: { id } });
   },
 };
-

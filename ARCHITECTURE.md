@@ -32,12 +32,12 @@ GET/POST/PATCH/DELETE
 - /categories
 - /prompts
 
-When creating a folder, execute one transaction:
-1. Create folder
-2. Create Image category
-3. Create Video category
-4. Create Movements category
-Rollback if any step fails.
+Creating a folder creates only the folder. Categories are prompt metadata: the
+prompt form lets the user select an existing category in that folder or create
+a new category inline before saving the prompt.
+
+The folder detail API queries prompts through their category's `folder_id`, so
+opening a folder displays its prompts directly.
 
 Frontend responsibilities:
 - UI
@@ -62,5 +62,4 @@ Backend responsibilities:
 - Authentication and authorization
 - Rate limiting
 - Validation
-- Transactions
 - Business logic
