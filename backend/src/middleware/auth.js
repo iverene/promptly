@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { createHash } from 'node:crypto';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
@@ -9,21 +10,32 @@ const supabase = supabaseUrl && supabaseKey
       auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
     })
   : null;
+const verifiedTokenCache = new Map();
 
 function verificationUnavailable(error) {
-  return !error?.status
-    || error.status >= 500
-    || error.name === 'AuthRetryableFetchError';
+  if (Number.isFinite(error?.status)) return error.status >= 500;
+  const networkErrorNames = new Set(['AuthRetryableFetchError', 'TypeError', 'AbortError', 'TimeoutError']);
+  if (networkErrorNames.has(error?.name)) return true;
+  return /fetch|network|socket|timeout|econn|enotfound|eai_again/i.test(error?.message ?? '');
 }
 
 async function verifyAccessToken(accessToken) {
+  const tokenKey = createHash('sha256').update(accessToken).digest('base64url');
+  const cached = verifiedTokenCache.get(tokenKey);
+  if (cached?.validUntil > Date.now()) return { data: { user: cached.user }, error: null };
+  verifiedTokenCache.delete(tokenKey);
+
   let lastResult;
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       const { data, error } = await supabase.auth.getClaims(accessToken);
       const claims = data?.claims;
       if (claims?.sub) {
-        return { data: { user: { id: claims.sub, email: claims.email } }, error: null };
+        const user = { id: claims.sub, email: claims.email };
+        const tokenExpiresAt = Number(claims.exp) * 1_000;
+        const validUntil = Math.min(tokenExpiresAt || Date.now(), Date.now() + 5 * 60_000);
+        if (validUntil > Date.now()) verifiedTokenCache.set(tokenKey, { user, validUntil });
+        return { data: { user }, error: null };
       }
       lastResult = { data: null, error: error ?? { status: 401, name: 'InvalidTokenError' } };
       if (!verificationUnavailable(lastResult.error)) return lastResult;
@@ -59,7 +71,8 @@ export async function requireAuth(request, response, next) {
 
     request.auth = { userId: user.id, email: user.email };
     next();
-  } catch {
+  } catch (error) {
+    console.error('Unexpected session verification failure:', error?.name, error?.message);
     response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
   }
 }
