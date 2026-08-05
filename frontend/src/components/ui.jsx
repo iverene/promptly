@@ -51,7 +51,7 @@ export function Header({ title, back = false, actions }) {
 
 export function GlassCard({ children, className = '', onClick, label }) {
   const interactive = onClick ? { role: 'link', tabIndex: 0, onClick, onKeyDown: (event) => { if (event.key === 'Enter' || event.key === ' ') onClick(); }, 'aria-label': label } : {};
-  return <div {...interactive} className={`glass rounded-[24px] p-5 transition duration-200 ${onClick ? 'focus-ring cursor-pointer hover:-translate-y-0.5 hover:bg-white/76 active:translate-y-0' : ''} ${className}`}>{children}</div>;
+  return <div {...interactive} className={`glass rounded-[24px] p-5 transition duration-200 lg:p-4 ${onClick ? 'focus-ring cursor-pointer hover:-translate-y-0.5 hover:bg-white/76 active:translate-y-0' : ''} ${className}`}>{children}</div>;
 }
 
 export function IconButton({ icon: Icon, onClick, label, danger = false, type = 'button', className = '' }) {
@@ -82,7 +82,7 @@ export function SectionTitle({ children, action }) {
 }
 
 export function EmptyState({ title, text, action, actionTitle }) {
-  return <div className="glass flex min-h-64 flex-col items-center justify-center rounded-[28px] px-6 py-12 text-center">{action ? <AddButton onClick={action} label={actionTitle} embedded /> : <span className="mb-5 grid size-14 place-items-center rounded-full border border-black/20 bg-white/65"><Sparkles size={21} strokeWidth={1.7} /></span>}<h3 className="text-xl font-medium tracking-[-.035em]">{title}</h3><p className="mt-2 max-w-sm text-sm leading-6 text-secondary">{text}</p></div>;
+  return <div className="glass flex min-h-64 flex-col items-center justify-center rounded-[28px] px-6 py-12 text-center lg:min-h-48 lg:py-8">{action ? <AddButton onClick={action} label={actionTitle} embedded /> : <span className="mb-5 grid size-14 place-items-center rounded-full border border-black/20 bg-white/65"><Sparkles size={21} strokeWidth={1.7} /></span>}<h3 className="text-xl font-medium tracking-[-.035em]">{title}</h3><p className="mt-2 max-w-sm text-sm leading-6 text-secondary">{text}</p></div>;
 }
 
 export function LoadingCards({ count, grid = false, mobileColumns = false }) {
@@ -94,7 +94,7 @@ export function LoadingCards({ count, grid = false, mobileColumns = false }) {
 }
 
 export function ErrorState({ message, retry }) {
-  return <div className="glass flex min-h-56 flex-col items-center justify-center rounded-[28px] px-6 py-10 text-center"><h3 className="text-lg font-medium">Unable to load</h3><p className="mb-5 mt-2 text-sm text-secondary">{message}</p><Button title="Try again" variant="secondary" onClick={retry} /></div>;
+  return <div className="glass flex min-h-56 flex-col items-center justify-center rounded-[28px] px-6 py-10 text-center lg:min-h-44 lg:py-7"><h3 className="text-lg font-medium">Unable to load</h3><p className="mb-5 mt-2 text-sm text-secondary">{message}</p><Button title="Try again" variant="secondary" onClick={retry} /></div>;
 }
 
 export function ConfirmDialog({ open, title, message, confirmLabel = 'Delete', onConfirm, onClose, loading = false }) {

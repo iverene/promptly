@@ -124,6 +124,18 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 .primary-nav__item.is-active .primary-nav__label { font-weight: 650; }
 @media (min-width: 1024px) {
   .page-shell > header:not(.relative) h1 { display: none; }
+  .page-shell > header:not(.relative) button {
+    position: fixed;
+    z-index: 35;
+    top: 24px;
+    right: 28px;
+    margin: 0;
+  }
+  .page-shell .grid:has(> .folder-card) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 220px)) !important;
+    gap: 20px !important;
+  }
+  .folder-card { max-width: 220px; }
   .primary-nav {
     top: 0;
     right: auto;
@@ -208,9 +220,9 @@ form div:has(> input:not([type="hidden"]):not([type="checkbox"]):not([type="radi
 
 .folder-card { position: relative; display: block; padding-top: 18px; transition: transform .22s ease, filter .22s ease; }
 .folder-card__tab { position: absolute; left: 0; top: 0; width: 43%; height: 34px; border: 1px solid rgba(17,17,17,.5); border-bottom: 0; border-radius: 10px 12px 0 0; background: color-mix(in srgb, var(--folder-color) 82%, transparent); backdrop-filter: blur(24px); }
-.folder-card__tab::after { content: ""; position: absolute; right: -20px; bottom: 0; width: 30px; height: 18px; background: var(--folder-color); border-top: 1px solid rgba(17,17,17,.72); transform: skewX(38deg); transform-origin: left bottom; }
+.folder-card__tab::after { display: none; }
 .folder-card__body { position: relative; z-index: 1; display: flex; min-height: 160px; flex-direction: column; justify-content: space-between; padding: 21px 12px 15px; border: 1px solid rgba(17,17,17,.5); border-radius: 0 12px 12px 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--folder-color) 88%, white 12%), color-mix(in srgb, var(--folder-color) 72%, transparent)); box-shadow: 0 16px 38px rgba(17,17,17,.07), inset 0 1px rgba(255,255,255,.62); backdrop-filter: blur(24px) saturate(130%); }
-@media (min-width: 1024px) { .folder-card__body { min-height: 150px; padding: 20px 18px 16px; } }
+@media (min-width: 1024px) { .folder-card__body { min-height: 122px; padding: 17px 15px 13px; } }
 .folder-card:disabled .folder-card__body { min-height: 112px; padding: 18px 14px 14px; }
 @media (min-width: 1024px) { .folder-card:disabled .folder-card__body { min-height: 118px; padding: 18px 16px 14px; } }
 .folder-card:not(:disabled):hover { transform: translateY(-3px); filter: saturate(1.05); }
