@@ -23,7 +23,10 @@ export async function requireAuth(request, response, next) {
     const { data, error } = await supabase.auth.getUser(match[1]);
     const user = data?.user;
     if (error || !user?.id) {
-      if (error?.status >= 500) return response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
+      const verificationUnavailable = !error?.status
+        || error.status >= 500
+        || error.name === 'AuthRetryableFetchError';
+      if (verificationUnavailable) return response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
       return response.status(401).json({ error: 'Invalid or expired session.' });
     }
     if (user.id !== allowedUserId) return response.status(403).json({ error: 'This account is not authorized.' });
