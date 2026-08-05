@@ -33,8 +33,7 @@
     {
       "source": "/(.*)",
       "destination": {
-        "service": "frontend",
-        "path": "/"
+        "service": "frontend"
       }
     }
   ],
