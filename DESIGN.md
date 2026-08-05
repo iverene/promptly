@@ -12,7 +12,10 @@ Promptly is a premium personal prompt library inspired by the minimal aesthetic 
 - Pastel folder colors only
 
 ## Typography
-Primary:
+Headers:
+- Times New Roman Italic
+
+Body and controls:
 - Neue Helvetica 55
 - Helvetica Roman
 
@@ -52,19 +55,15 @@ Folder palette:
 ## Home
 Large title.
 Floating glass search.
-Favorites.
-Recent prompts.
 Rounded folder grid.
 Floating create button.
 
 Folders resemble rounded file folders with pastel fills and thin black outlines.
 
 ## Folder
-Display categories:
-- Image
-- Video
-- Movements
-- + Add Category
+Display searchable prompt cards directly, with the category shown as context.
+Folder archive and delete actions live inside the three-dot menu. A separate
+pencil icon opens folder editing.
 
 ## Category
 Prompt cards contain:
@@ -79,7 +78,9 @@ Pastel color selection.
 Optional description.
 
 ## Navigation
-Fully rounded floating glass bottom navigation.
+Fully rounded floating glass bottom navigation with Favorites and Archive.
+Profile is not a navigation item. The contextual create action floats at the
+bottom-right instead of appearing inside the navigation.
 
 ## Profile
 Display the user's profile name and email in a calm monochrome account screen.

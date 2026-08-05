@@ -36,8 +36,9 @@ Creating a folder creates only the folder and its selected pastel color.
 Categories are added explicitly from the folder screen; no categories are
 generated automatically.
 
-Opening a folder displays its categories. Opening a category displays its
-prompts, and prompt cards retain their folder and category context.
+Opening a folder queries and displays its prompts directly through each
+prompt's category relationship. Category routes remain available, and prompt
+cards retain their folder and category context.
 
 Frontend responsibilities:
 - UI

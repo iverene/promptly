@@ -1,14 +1,24 @@
-import { ArrowLeft, Archive, Home, LoaderCircle, Plus, Search, Sparkles, UserRound } from 'lucide-react';
+import { ArrowLeft, Archive, Heart, LoaderCircle, Plus, Search, Sparkles } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 
 export function AppShell({ children }) {
   const [location] = useLocation();
-  const navigation = [{ to: '/home', label: 'Library', icon: Home }, { to: '/folders/new', label: 'New', icon: Plus, featured: true }, { to: '/settings', label: 'Archive', icon: Archive }, { to: '/profile', label: 'Profile', icon: UserRound }];
+  const navigation = [{ to: '/favorites', label: 'Favorites', icon: Heart }, { to: '/settings', label: 'Archive', icon: Archive }];
+  const folderMatch = location.match(/^\/folders\/([^/]+)$/);
+  const categoryMatch = location.match(/^\/categories\/([^/]+)$/);
+  const createAction = location === '/home'
+    ? { to: '/folders/new', label: 'Create folder' }
+    : folderMatch && folderMatch[1] !== 'new'
+      ? { to: `/folders/${folderMatch[1]}/prompts/new`, label: 'Create prompt' }
+      : categoryMatch
+        ? { to: `/categories/${categoryMatch[1]}/prompts/new`, label: 'Create prompt' }
+        : null;
   return <div className="app-background min-h-screen">
     <main className="relative z-10 min-h-screen pb-32">{children}</main>
-    <nav aria-label="Primary navigation" className="glass fixed bottom-5 left-1/2 z-40 flex h-[72px] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 items-center justify-around rounded-full px-2 shadow-[0_20px_50px_rgba(0,0,0,.14)]">
-      {navigation.map(({ to, label, icon: Icon, featured }) => { const active = location === to || (!featured && to === '/home' && location.startsWith('/folder')); return <Link key={to} href={to} className={`focus-ring flex items-center justify-center rounded-full transition duration-200 ${featured ? 'size-14 min-w-14 bg-black text-white shadow-lg shadow-black/20 hover:-translate-y-0.5' : `h-12 min-w-14 gap-2 px-3 text-xs font-medium sm:min-w-20 ${active ? 'bg-white/80 text-ink' : 'text-muted hover:text-ink'}`}`}><Icon size={featured ? 22 : 18} /><span className={featured ? 'sr-only' : 'hidden sm:inline'}>{label}</span></Link>; })}
+    <nav aria-label="Primary navigation" className="glass fixed bottom-5 left-1/2 z-40 flex h-[68px] w-[calc(100%-2rem)] max-w-xs -translate-x-1/2 items-center justify-around rounded-full px-2 shadow-[0_20px_50px_rgba(0,0,0,.14)]">
+      {navigation.map(({ to, label, icon: Icon }) => { const active = location === to; return <Link key={to} href={to} className={`focus-ring flex h-12 min-w-28 items-center justify-center gap-2 rounded-full px-4 text-xs font-medium transition duration-200 ${active ? 'bg-white/85 text-ink shadow-sm' : 'text-muted hover:bg-white/45 hover:text-ink'}`}><Icon size={18} /><span>{label}</span></Link>; })}
     </nav>
+    {createAction && <Link href={createAction.to} aria-label={createAction.label} title={createAction.label} className="focus-ring glass-strong fixed bottom-28 right-5 z-40 grid size-16 place-items-center rounded-full bg-black text-white shadow-[0_20px_45px_rgba(0,0,0,.22)] transition duration-200 hover:-translate-y-1 sm:right-8 lg:right-10"><Plus size={23} /></Link>}
   </div>;
 }
 
@@ -20,7 +30,7 @@ export function Header({ title, subtitle, back = false, actions }) {
   return <header className="glass sticky top-4 z-30 rounded-[26px] px-4 py-3.5 sm:px-5">
     <div className="flex items-center gap-3">
       {back && <IconButton label="Go back" icon={ArrowLeft} onClick={() => window.history.back()} />}
-      <div className="min-w-0 flex-1"><h1 className="truncate text-[clamp(1.5rem,4vw,2rem)] font-medium tracking-[-.055em] text-ink">{title}</h1>{subtitle && <p className="mt-0.5 truncate text-xs tracking-wide text-secondary">{subtitle}</p>}</div>
+      <div className="min-w-0 flex-1"><h1 className="truncate text-[clamp(1.7rem,4vw,2.25rem)] tracking-[-.035em] text-ink">{title}</h1>{subtitle && <p className="mt-0.5 truncate text-xs tracking-wide text-secondary">{subtitle}</p>}</div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   </header>;
@@ -50,7 +60,7 @@ export function SearchField({ value, onChange, placeholder = 'Search' }) {
 }
 
 export function SectionTitle({ children, action, eyebrow }) {
-  return <div className="mb-4 mt-10 flex items-end justify-between gap-4"><div>{eyebrow && <p className="mb-1.5 text-[10px] font-medium uppercase tracking-[.2em] text-muted">{eyebrow}</p>}<h2 className="text-[clamp(1.35rem,3vw,1.8rem)] font-medium tracking-[-.045em] text-ink">{children}</h2></div>{action}</div>;
+  return <div className="mb-4 mt-10 flex items-end justify-between gap-4"><div>{eyebrow && <p className="mb-1.5 text-[10px] font-medium uppercase tracking-[.2em] text-muted">{eyebrow}</p>}<h2 className="text-[clamp(1.55rem,3vw,2rem)] tracking-[-.035em] text-ink">{children}</h2></div>{action}</div>;
 }
 
 export function EmptyState({ title, text, action, actionTitle }) {

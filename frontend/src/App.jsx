@@ -9,6 +9,7 @@ import CategoryForm from './pages/CategoryForm';
 import PromptForm from './pages/PromptForm';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
+import Favorites from './pages/Favorites';
 import Login, { AuthLoading, AuthSetupRequired } from './pages/Login';
 import { useAuth } from './providers/AuthProvider';
 
@@ -19,6 +20,7 @@ export default function App() {
   if (!session) return <Login />;
   return <AppShell><Switch>
     <Route path="/home"><Home /></Route>
+    <Route path="/favorites"><Favorites /></Route>
     <Route path="/folders/new"><FolderForm /></Route>
     <Route path="/folders/:id/edit"><FolderForm /></Route>
     <Route path="/folders/:folderId/categories/new"><CategoryForm /></Route>
