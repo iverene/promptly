@@ -1,4 +1,4 @@
-import { Archive, Copy, Heart, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Archive, Copy, Heart, MoreVertical as MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useParams } from 'wouter';
 import { useState } from 'react';

@@ -192,6 +192,31 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 }
 .focus-ring:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
 
+/* Detached action options inspired by the reference menu. */
+.page-shell .glass-strong.absolute.top-14 {
+  width: 200px;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0 !important;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.page-shell .glass-strong.absolute.top-14 > button {
+  min-height: 46px;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  border: 1.5px solid rgba(17,17,17,.72);
+  border-radius: 14px !important;
+  background: #fff;
+  font-size: 14px;
+}
+.page-shell .glass-strong.absolute.top-14 > button:hover { background: #f5f5f2; }
+.page-shell .glass-strong.absolute.top-14 > button.text-danger:hover { background: #fff1f0; }
+
 /* Keep modal backdrops light so the surrounding interface remains visible. */
 [role="presentation"].fixed.inset-0 {
   background-color: rgba(17, 17, 17, .1);
