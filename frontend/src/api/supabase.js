@@ -2,6 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
+const authStorageKey = 'promptly-auth-session';
+const projectRef = (() => { try { return new URL(supabaseUrl).hostname.split('.')[0]; } catch { return ''; } })();
 
 export const supabaseConfigured = Boolean(supabaseUrl && supabaseKey);
 export const supabase = supabaseConfigured
@@ -11,11 +13,17 @@ export const supabase = supabaseConfigured
         autoRefreshToken: true,
         detectSessionInUrl: true,
         storage: window.localStorage,
+        storageKey: authStorageKey,
       },
     })
   : null;
 
 let refreshPromise;
+
+export function clearPersistedSession() {
+  window.localStorage.removeItem(authStorageKey);
+  if (projectRef) window.localStorage.removeItem(`sb-${projectRef}-auth-token`);
+}
 
 export async function getValidSession(forceRefresh = false) {
   if (!supabase) return null;

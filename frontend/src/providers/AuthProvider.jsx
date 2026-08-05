@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { getValidSession, supabase, supabaseConfigured } from '../api/supabase';
+import { clearPersistedSession, getValidSession, supabase, supabaseConfigured } from '../api/supabase';
 
 const AuthContext = createContext(null);
 
@@ -19,14 +19,20 @@ export function AuthProvider({ children }) {
     if (!supabase) { setLoading(false); return undefined; }
 
     let mounted = true;
-    getValidSession().then((storedSession) => {
-      if (mounted) { setSession(storedSession); setLoading(false); }
+    let initialized = false;
+    getValidSession(true).then((storedSession) => {
+      if (mounted) {
+        initialized = true;
+        setSession(storedSession);
+        setLoading(false);
+      }
     }).catch(() => { if (mounted) setLoading(false); });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (!initialized && event === 'INITIAL_SESSION') return;
       if (mounted) { setSession(nextSession); setLoading(false); }
     });
-    const unauthorized = async () => {
-      await supabase.auth.signOut({ scope: 'local' });
+    const unauthorized = () => {
+      clearPersistedSession();
       if (mounted) setSession(null);
     };
     window.addEventListener('promptly:unauthorized', unauthorized);
@@ -39,6 +45,13 @@ export function AuthProvider({ children }) {
     return result;
   }, []);
 
+  const signOut = useCallback(async () => {
+    const result = await supabase.auth.signOut();
+    if (result.error) clearPersistedSession();
+    setSession(null);
+    return { error: null };
+  }, []);
+
   const value = useMemo(() => ({
     configured: supabaseConfigured,
     loading,
@@ -46,16 +59,9 @@ export function AuthProvider({ children }) {
     user: session?.user ?? null,
     displayName: userDisplayName(session?.user),
     signIn: (email, password) => supabase.auth.signInWithPassword({ email, password }),
-    signOut: async () => {
-      const result = await supabase.auth.signOut();
-      if (result.error) {
-        await supabase.auth.signOut({ scope: 'local' });
-        return { error: null };
-      }
-      return result;
-    },
+    signOut,
     updateDisplayName,
-  }), [loading, session, updateDisplayName]);
+  }), [loading, session, signOut, updateDisplayName]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
