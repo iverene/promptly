@@ -217,6 +217,15 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 .page-shell .glass-strong.absolute.top-14 > button:hover { background: #f5f5f2; }
 .page-shell .glass-strong.absolute.top-14 > button.text-danger:hover { background: #fff1f0; }
 
+/* Keep short prompt content compact instead of creating an oversized card. */
+.page-shell > article.mt-8 {
+  padding: 16px;
+}
+.page-shell > article.mt-8 > p.mt-5 {
+  margin-top: 10px;
+  line-height: 1.55;
+}
+
 /* Keep modal backdrops light so the surrounding interface remains visible. */
 [role="presentation"].fixed.inset-0 {
   background-color: rgba(17, 17, 17, .1);

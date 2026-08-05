@@ -41,9 +41,9 @@ export function Header({ title, back = false, actions }) {
   const [location, navigate] = useLocation();
   const goBack = () => typeof back === 'function' ? back() : navigate(typeof back === 'string' ? back : logicalBackTarget(location));
   return <header className="relative z-30 bg-transparent pb-4">
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-5">
       {back && <button type="button" aria-label="Go back" title="Go back" onClick={goBack} className="focus-ring grid size-10 shrink-0 place-items-center bg-transparent text-ink transition duration-200 hover:-translate-x-0.5"><ChevronLeft size={27} strokeWidth={1.6} /></button>}
-      <div className="min-w-0 flex-1"><h1 className="truncate text-[clamp(1.45rem,3vw,1.9rem)] tracking-[-.035em] text-ink">{title}</h1></div>
+      <div className="min-w-0 flex-1"><h1 className="truncate pl-1 text-[clamp(1.45rem,3vw,1.9rem)] tracking-[-.035em] text-ink">{title}</h1></div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   </header>;
