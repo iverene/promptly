@@ -123,19 +123,6 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 .primary-nav__label { overflow: hidden; max-width: 100%; text-overflow: ellipsis; font-size: 10px; font-weight: 500; line-height: 1.2; white-space: nowrap; }
 .primary-nav__item.is-active .primary-nav__label { font-weight: 650; }
 @media (min-width: 1024px) {
-  .page-shell > header:not(.relative) h1 { display: none; }
-  .page-shell > header:not(.relative) button {
-    position: fixed;
-    z-index: 35;
-    top: 24px;
-    right: 28px;
-    margin: 0;
-  }
-  .page-shell .grid:has(> .folder-card) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 220px)) !important;
-    gap: 20px !important;
-  }
-  .folder-card { max-width: 220px; }
   .primary-nav {
     top: 0;
     right: auto;
@@ -192,40 +179,6 @@ h1, h2, h3 { font-family: "Times New Roman", Times, serif; font-style: italic; f
 }
 .focus-ring:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
 
-/* Detached action options inspired by the reference menu. */
-.page-shell .glass-strong.absolute.top-14 {
-  width: 200px;
-  gap: 6px;
-  padding: 0;
-  border: 0;
-  border-radius: 0 !important;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-.page-shell .glass-strong.absolute.top-14 > button {
-  min-height: 46px;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 14px;
-  border: 1.5px solid rgba(17,17,17,.72);
-  border-radius: 14px !important;
-  background: #fff;
-  font-size: 14px;
-}
-.page-shell .glass-strong.absolute.top-14 > button:hover { background: #f5f5f2; }
-.page-shell .glass-strong.absolute.top-14 > button.text-danger:hover { background: #fff1f0; }
-
-/* Keep short prompt content compact instead of creating an oversized card. */
-.page-shell > article.mt-8 {
-  padding: 16px;
-}
-.page-shell > article.mt-8 > p.mt-5 {
-  margin-top: 10px;
-  line-height: 1.55;
-}
-
 /* Keep modal backdrops light so the surrounding interface remains visible. */
 [role="presentation"].fixed.inset-0 {
   background-color: rgba(17, 17, 17, .1);
@@ -251,16 +204,6 @@ form div:has(> input:not([type="hidden"]):not([type="checkbox"]):not([type="radi
 .border-black\/20 { border-color: rgba(0,0,0,.42); }
 .border-black\/25 { border-color: rgba(0,0,0,.46); }
 .border-black\/30 { border-color: rgba(0,0,0,.52); }
-
-.folder-card { position: relative; display: block; padding-top: 18px; transition: transform .22s ease, filter .22s ease; }
-.folder-card__tab { position: absolute; left: 0; top: 0; width: 43%; height: 34px; border: 1px solid rgba(17,17,17,.5); border-bottom: 0; border-radius: 10px 12px 0 0; background: color-mix(in srgb, var(--folder-color) 82%, transparent); backdrop-filter: blur(24px); }
-.folder-card__tab::after { display: none; }
-.folder-card__body { position: relative; z-index: 1; display: flex; min-height: 160px; flex-direction: column; justify-content: space-between; padding: 21px 12px 15px; border: 1px solid rgba(17,17,17,.5); border-radius: 0 12px 12px 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--folder-color) 88%, white 12%), color-mix(in srgb, var(--folder-color) 72%, transparent)); box-shadow: 0 16px 38px rgba(17,17,17,.07), inset 0 1px rgba(255,255,255,.62); backdrop-filter: blur(24px) saturate(130%); }
-@media (min-width: 1024px) { .folder-card__body { min-height: 122px; padding: 17px 15px 13px; } }
-.folder-card:disabled .folder-card__body { min-height: 112px; padding: 18px 14px 14px; }
-@media (min-width: 1024px) { .folder-card:disabled .folder-card__body { min-height: 118px; padding: 18px 16px 14px; } }
-.folder-card:not(:disabled):hover { transform: translateY(-3px); filter: saturate(1.05); }
-.folder-card:not(:disabled):active { transform: translateY(-1px); }
 
 .soft-enter { animation: soft-enter .22s ease-out both; }
 .toast-enter { animation: toast-enter .22s ease-out both; }
