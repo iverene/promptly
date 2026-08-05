@@ -18,6 +18,11 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const request = error.config;
+    if (error.response?.status === 503 && request?.method?.toLowerCase() === 'get' && !request._serviceRetry) {
+      request._serviceRetry = true;
+      await new Promise((resolve) => setTimeout(resolve, 1_000));
+      return api(request);
+    }
     if (error.response?.status === 401 && supabase && request && !request._authRetry) {
       request._authRetry = true;
       const session = await getValidSession(true);

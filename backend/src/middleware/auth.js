@@ -10,6 +10,31 @@ const supabase = supabaseUrl && supabaseKey
     })
   : null;
 
+function verificationUnavailable(error) {
+  return !error?.status
+    || error.status >= 500
+    || error.name === 'AuthRetryableFetchError';
+}
+
+async function verifyAccessToken(accessToken) {
+  let lastResult;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const { data, error } = await supabase.auth.getClaims(accessToken);
+      const claims = data?.claims;
+      if (claims?.sub) {
+        return { data: { user: { id: claims.sub, email: claims.email } }, error: null };
+      }
+      lastResult = { data: null, error: error ?? { status: 401, name: 'InvalidTokenError' } };
+      if (!verificationUnavailable(lastResult.error)) return lastResult;
+    } catch (error) {
+      lastResult = { data: null, error };
+    }
+    if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  return lastResult;
+}
+
 export async function requireAuth(request, response, next) {
   if (!supabase || !allowedUserId) {
     return response.status(503).json({ error: 'API authentication is not configured.' });
@@ -20,13 +45,14 @@ export async function requireAuth(request, response, next) {
   if (!match) return response.status(401).json({ error: 'Authentication required.' });
 
   try {
-    const { data, error } = await supabase.auth.getUser(match[1]);
+    const { data, error } = await verifyAccessToken(match[1]);
     const user = data?.user;
     if (error || !user?.id) {
-      const verificationUnavailable = !error?.status
-        || error.status >= 500
-        || error.name === 'AuthRetryableFetchError';
-      if (verificationUnavailable) return response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
+      if (verificationUnavailable(error)) {
+        console.error('Session verification unavailable:', error?.name, error?.status ?? 'no-status');
+        response.set('Retry-After', '2');
+        return response.status(503).json({ error: 'Session verification is temporarily unavailable.' });
+      }
       return response.status(401).json({ error: 'Invalid or expired session.' });
     }
     if (user.id !== allowedUserId) return response.status(403).json({ error: 'This account is not authorized.' });
