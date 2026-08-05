@@ -14,6 +14,9 @@ Promptly is a premium personal prompt library inspired by the minimal aesthetic 
 ## Typography
 Headers:
 - Times New Roman Italic
+- Compact responsive sizing that preserves hierarchy without dominating mobile screens
+- Transparent page headers without cards, borders, shadows, or rounded containers
+- Consistent page-top spacing: 24px plus the device safe area on mobile and 32px on larger screens
 
 Body and controls:
 - Neue Helvetica 55
@@ -78,9 +81,15 @@ Pastel color selection.
 Optional description.
 
 ## Navigation
-Fully rounded floating glass bottom navigation with Favorites and Archive.
+Navigation contains Home, Favorites, and Archive. Mobile uses a fully rounded
+floating glass bottom bar with evenly spaced icons above their labels. Desktop
+uses a conventional full-height left sidebar with Promptly branding, horizontal
+icon-and-label rows, and a dark rectangular active state.
 Profile is not a navigation item. The contextual create action floats at the
-bottom-right instead of appearing inside the navigation.
+bottom-right instead of appearing inside the navigation. It is a circular black
+button with a white plus icon. Folder collections use two columns on mobile. Header
+back buttons return to the page's logical parent rather than replaying browser
+history.
 
 ## Profile
 Display the user's profile name and email in a calm monochrome account screen.
