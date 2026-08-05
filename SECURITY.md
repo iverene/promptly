@@ -38,11 +38,11 @@ Never add the database password, direct connection string, secret key, or servic
 
 ## 3. Configure Vercel
 
-Create separate Vercel projects for `frontend/` and `backend/`.
+Create one Vercel project from the repository root. The root `vercel.json` deploys `frontend/` and `backend/` as separate services on one domain.
 
 Frontend production variables:
 
-- `VITE_API_URL=https://your-backend.vercel.app/api`
+- `VITE_API_URL=/api`
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 
@@ -50,18 +50,18 @@ Backend production variables:
 
 - `DATABASE_URL` using the Supabase transaction pooler
 - `DIRECT_URL` using the direct or session connection for Prisma generation/migrations
-- `CORS_ORIGIN=https://your-frontend.vercel.app`
+- `CORS_ORIGIN=https://your-production-domain.vercel.app`
 - `SUPABASE_URL`
 - `SUPABASE_PUBLISHABLE_KEY`
 - `ALLOWED_USER_ID`
 
-If either project uses a custom domain, update `CORS_ORIGIN` and the frontend Content Security Policy in `frontend/vercel.json` to include that exact domain.
+If the project uses a custom domain, update `CORS_ORIGIN` to include that exact origin. Same-origin API calls are already allowed by the frontend Content Security Policy.
 
 ## 4. Enable dashboard protections
 
 These controls cannot be enabled through repository code:
 
-- In both Vercel projects, enable **Deployment Protection → Standard Protection** for preview deployments.
+- In the Vercel project, enable **Deployment Protection → Standard Protection** for preview deployments.
 - If your plan supports private production deployments, protect production too as an additional layer. Application authentication must remain enabled regardless.
 - Enable a Vercel WAF rate-limit rule for `/api/*`; the Express limiter is a baseline per function instance, while WAF enforcement applies before traffic reaches the function.
 - Enable Vercel spend alerts and review Function logs after launch.

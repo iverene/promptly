@@ -192,16 +192,16 @@ npm run prisma:deploy --workspace backend
 
 ## Production deployment
 
-Use separate frontend and backend deployments with stable production domains.
+Deploy the repository as one Vercel project containing the `frontend` and `backend` services. The root `vercel.json` sends `/api/*` to Express and all other routes to Vite, so both services share one stable production domain.
 
 ### Frontend
 
-For Vercel, set the project root to `frontend`, use the Vite build command, and publish `dist`. The included `frontend/vercel.json` provides SPA rewrites, security headers, PWA headers, and asset caching.
+The `frontend` service uses Vite and publishes `dist`. The included `frontend/vercel.json` provides SPA rewrites, security headers, PWA headers, and asset caching.
 
 Set:
 
 ```env
-VITE_API_URL=https://your-backend-domain.com/api
+VITE_API_URL=/api
 VITE_SUPABASE_URL=https://your-project-ref.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key
 ```
@@ -210,12 +210,12 @@ Redeploy after changing a `VITE_*` value because these values are embedded durin
 
 ### Backend
 
-Deploy `backend` to a Node/Express-compatible service and set:
+The `backend` service is automatically detected as Express from `backend/src/app.js`. Set:
 
 ```env
 DATABASE_URL=your-supabase-runtime-pooler-url
 DIRECT_URL=your-supabase-migration-url
-CORS_ORIGIN=https://your-frontend-domain.com
+CORS_ORIGIN=https://your-production-domain.com
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key
 ALLOWED_USER_ID=your-supabase-auth-user-uuid
@@ -228,7 +228,7 @@ NODE_ENV=production
 CORS_ORIGIN=https://promptly.example.com,https://promptly.vercel.app
 ```
 
-If deploying Express to Vercel, follow Vercel's current Express deployment guidance and use Supabase connection pooling because serverless instances may create concurrent database connections: [Using Express.js with Vercel](https://examples.vercel.com/kb/guide/using-express-with-vercel).
+Use the Supabase transaction pooler for `DATABASE_URL` because Vercel Functions can create concurrent database connections. `DIRECT_URL` remains the direct/session connection used for Prisma migrations. See [Using Express.js with Vercel](https://vercel.com/kb/guide/ship-a-express-app-on-vercel).
 
 ### Supabase Authentication
 
