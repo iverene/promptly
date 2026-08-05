@@ -1,4 +1,4 @@
-const CACHE_NAME = 'promptly-shell-v2';
+const CACHE_NAME = 'promptly-shell-v3';
 const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/pwa-192.png', '/pwa-512.png', '/pwa-maskable-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -24,17 +24,41 @@ self.addEventListener('fetch', (event) => {
   if (!canCache(request, url)) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request)
-      .then((response) => {
-        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', response.clone()));
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(request);
+        if (response.ok) {
+          const copy = response.clone();
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put('/index.html', copy);
+        }
         return response;
-      })
-      .catch(() => caches.match('/index.html')));
+      } catch {
+        return (await caches.match('/index.html'))
+          || (await caches.match('/'))
+          || new Response('Promptly is unavailable offline.', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+          });
+      }
+    })());
     return;
   }
 
-  event.respondWith(caches.match(request).then((cached) => cached || fetch(request).then((response) => {
-    if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
-    return response;
-  })));
+  event.respondWith((async () => {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+
+    try {
+      const response = await fetch(request);
+      if (response.ok) {
+        const copy = response.clone();
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(request, copy);
+      }
+      return response;
+    } catch {
+      return new Response('', { status: 503 });
+    }
+  })());
 });

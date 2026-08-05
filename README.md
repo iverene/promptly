@@ -196,7 +196,7 @@ Deploy the repository as one Vercel project containing the `frontend` and `backe
 
 ### Frontend
 
-The `frontend` service uses Vite and publishes `dist`. The included `frontend/vercel.json` provides SPA rewrites, security headers, PWA headers, and asset caching.
+The `frontend` service uses Vite and publishes `dist`. The root `vercel.json` provides service routing, SPA fallback, security headers, PWA headers, and asset caching.
 
 Set:
 
