@@ -13,7 +13,9 @@ app.use(helmet());
 const allowedOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:5173').split(',').map((origin) => origin.trim()).filter(Boolean);
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    const localDevelopmentOrigin = process.env.NODE_ENV !== 'production'
+      && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin ?? '');
+    if (!origin || allowedOrigins.includes(origin) || localDevelopmentOrigin) return callback(null, true);
     const error = new Error('Origin is not allowed by CORS.');
     error.status = 403;
     callback(error);
