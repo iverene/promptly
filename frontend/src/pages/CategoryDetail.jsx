@@ -15,7 +15,7 @@ export default function CategoryDetail() {
   const queryClient = useQueryClient();
   const toast = useToast();
   const category = useQuery({ queryKey: ['category', id], queryFn: () => categoriesApi.get(id) });
-  const prompts = useQuery({ queryKey: ['prompts', id, search], queryFn: () => promptsApi.list({ categoryId: id, search }), placeholderData: (previousData) => previousData });
+  const prompts = useQuery({ queryKey: ['prompts', id, search], queryFn: () => promptsApi.list({ categoryId: id, search }) });
   const favorite = useMutation({ mutationFn: (prompt) => promptsApi.update(prompt.id, { isFavorite: !prompt.isFavorite }), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['prompts'] }), onError: (error) => toast(apiMessage(error), 'error') });
 
   return <Page><Header title={category.data?.name || 'Category'} subtitle={category.data?.folder?.name} back={category.data?.folder?.id ? `/folders/${category.data.folder.id}` : '/home'} actions={<IconButton icon={Settings2} label="Edit category" onClick={() => navigate(`/categories/${id}/edit`)} />} />

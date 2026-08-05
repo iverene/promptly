@@ -10,8 +10,9 @@ const includeSummary = {
 
 export const folderService = {
   list({ search = '', archived = false }) {
+    const normalizedSearch = search.trim();
     return prisma.folder.findMany({
-      where: { isArchived: archived, ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}) },
+      where: { isArchived: archived, ...(normalizedSearch ? { name: { startsWith: normalizedSearch, mode: 'insensitive' } } : {}) },
       include: includeSummary,
       orderBy: { updatedAt: 'desc' },
     });

@@ -5,16 +5,17 @@ const context = { category: { include: { folder: { select: { id: true, name: tru
 
 export const promptService = {
   list({ folderId, categoryId, search = '', archived = false, favorite, recent, limit = 50 }) {
+    const normalizedSearch = search.trim();
     return prisma.prompt.findMany({
       where: {
         isArchived: archived,
         ...(folderId ? { category: { folderId } } : {}),
         ...(categoryId ? { categoryId } : {}),
         ...(favorite !== undefined ? { isFavorite: favorite } : {}),
-        ...(search ? { OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { content: { contains: search, mode: 'insensitive' } },
-          { category: { name: { contains: search, mode: 'insensitive' } } },
+        ...(normalizedSearch ? { OR: [
+          { title: { startsWith: normalizedSearch, mode: 'insensitive' } },
+          { content: { startsWith: normalizedSearch, mode: 'insensitive' } },
+          { category: { name: { startsWith: normalizedSearch, mode: 'insensitive' } } },
         ] } : {}),
       },
       include: context,

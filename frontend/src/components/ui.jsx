@@ -82,7 +82,8 @@ export function SectionTitle({ children, action }) {
 }
 
 export function EmptyState({ title, text, action, actionTitle }) {
-  return <div className="glass flex min-h-64 flex-col items-center justify-center rounded-[28px] px-6 py-12 text-center lg:min-h-48 lg:py-8">{action ? <AddButton onClick={action} label={actionTitle} embedded /> : <span className="mb-5 grid size-14 place-items-center rounded-full border border-black/20 bg-white/65"><Sparkles size={21} strokeWidth={1.7} /></span>}<h3 className="text-xl font-medium tracking-[-.035em]">{title}</h3><p className="mt-2 max-w-sm text-sm leading-6 text-secondary">{text}</p></div>;
+  const EmptyIcon = title.startsWith('No matching') ? Search : Sparkles;
+  return <div className="glass flex min-h-64 flex-col items-center justify-center rounded-[28px] px-6 py-12 text-center lg:min-h-48 lg:py-8">{action ? <AddButton onClick={action} label={actionTitle} embedded /> : <span className="mb-5 grid size-14 place-items-center rounded-full border border-black/20 bg-white/65"><EmptyIcon size={21} strokeWidth={1.7} /></span>}<h3 className="text-xl font-medium tracking-[-.035em]">{title}</h3><p className="mt-2 max-w-sm text-sm leading-6 text-secondary">{text}</p></div>;
 }
 
 export function LoadingCards({ count, grid = false, mobileColumns = false }) {

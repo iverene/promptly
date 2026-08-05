@@ -17,7 +17,7 @@ export default function FolderDetail() {
   const [actionsOpen, setActionsOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const folder = useQuery({ queryKey: ['folder', id], queryFn: () => foldersApi.get(id) });
-  const prompts = useQuery({ queryKey: ['prompts', 'folder', id, search], queryFn: () => promptsApi.list({ folderId: id, search }), placeholderData: (previousData) => previousData });
+  const prompts = useQuery({ queryKey: ['prompts', 'folder', id, search], queryFn: () => promptsApi.list({ folderId: id, search }) });
   const favorite = useMutation({ mutationFn: (prompt) => promptsApi.update(prompt.id, { isFavorite: !prompt.isFavorite }), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['prompts'] }), onError: (error) => toast(apiMessage(error), 'error') });
   const archive = useMutation({ mutationFn: () => foldersApi.update(id, { isArchived: true }), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['folders'] }); toast('Folder archived'); navigate('/home'); }, onError: (error) => toast(apiMessage(error), 'error') });
   const remove = useMutation({ mutationFn: () => foldersApi.remove(id), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['folders'] }); toast('Folder deleted'); navigate('/home'); }, onError: (error) => toast(apiMessage(error), 'error') });
